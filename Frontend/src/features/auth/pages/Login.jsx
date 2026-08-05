@@ -1,12 +1,30 @@
 import { useState } from "react";
 import "../auth.form.scss";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { useAuth } from "../hooks/useAuth";
-import { useNavigate } from "react-router";
+
+const MailIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <rect x="2" y="4" width="20" height="16" rx="2" />
+    <path d="m22 6-10 7L2 6" />
+  </svg>
+);
+
+const LockIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <rect x="4" y="10" width="16" height="11" rx="2" />
+    <path d="M8 10V7a4 4 0 0 1 8 0v3" />
+  </svg>
+);
+
+const ArrowIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <path d="M5 12h14M13 6l6 6-6 6" />
+  </svg>
+);
 
 const Login = () => {
   const navigate = useNavigate();
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -23,9 +41,10 @@ const Login = () => {
       setError(err?.response?.data?.message || err.message || "Login failed");
     }
   };
+
   if (loading) {
     return (
-      <main>
+      <main className="loading-state">
         <h1>loading ...............</h1>
       </main>
     );
@@ -33,61 +52,105 @@ const Login = () => {
 
   return (
     <main className="auth-wrapper">
-      <div className="form-card">
-        <div className="form-header">
-          <h2>Welcome back</h2>
-          <p>Please sign in to continue to your dashboard</p>
+      {/* Header Navigation Bar */}
+      <header className="auth-navbar">
+        <Link to="/" className="nav-logo">
+          <span className="brand-name">CareerAI</span>
+        </Link>
+        <div className="nav-actions">
+          <span className="nav-text">Don't have an account?</span>
+          <Link to="/register" className="nav-btn">
+            Sign up
+          </Link>
+        </div>
+      </header>
+
+      <div className="auth-split-container">
+        {/* Left Visual Panel */}
+        <div className="auth-panel-left">
+          <img
+            className="panel-bg-image"
+            alt="Career Background"
+            src="https://img.magnific.com/free-photo/businesswoman-interacting-with-ai-hologram-office_23-2151977876.jpg?semt=ais_test_b&w=740&q=80"
+          />
+          <div className="panel-content">
+            <h2>Welcome Back!</h2>
+            <p>Grow into a more intelligent career, one sign-in at a time.</p>
+          </div>
         </div>
 
-        <form onSubmit={handleSubmit}>
-          <div className="input-group">
-            <label htmlFor="email">Email address</label>
-            <input
-              onChange={(e) => {
-                setEmail(e.target.value);
-              }}
-              type="email"
-              name="email"
-              id="email"
-              placeholder="alex@company.com"
-              required
-            />
+        {/* Right Form Side Panel */}
+        <div className="auth-panel-right">
+          <div className="form-header">
+            <h3>Sign In</h3>
+            <p>Enter your credentials to access your account</p>
           </div>
 
-          <div className="input-group">
-            <div className="label-row">
+          <form onSubmit={handleSubmit}>
+            <div className="input-group">
+              <label htmlFor="email">Email address</label>
+              <div className="input-with-icon">
+                <MailIcon />
+                <input
+                  onChange={(e) => setEmail(e.target.value)}
+                  type="email"
+                  name="email"
+                  id="email"
+                  placeholder="you@company.com"
+                  required
+                />
+              </div>
+            </div>
+
+            <div className="input-group">
               <label htmlFor="password">Password</label>
+              <div className="input-with-icon">
+                <LockIcon />
+                <input
+                  onChange={(e) => setPassword(e.target.value)}
+                  type="password"
+                  name="password"
+                  id="password"
+                  placeholder="••••••••"
+                  required
+                />
+              </div>
+            </div>
+
+            <div className="form-options">
+              <label className="checkbox-label">
+                <input type="checkbox" name="remember" />
+                Remember me
+              </label>
               <a href="#forgot" className="forgot-link">
-                Forgot?
+                Forgot Password?
               </a>
             </div>
-            <input
-              onChange={(e) => {
-                setPassword(e.target.value);
-              }}
-              type="password"
-              name="password"
-              id="password"
-              placeholder="••••••••"
-              required
-            />
-          </div>
 
-          {error && <p className="error-message">{error}</p>}
+            {error && <p className="error-message">{error}</p>}
 
-          <button type="submit" className="button primary-button">
-            Sign In
-          </button>
-        </form>
-        <div className="form-footer">
-          <p>
+            <button type="submit" className="button primary-button">
+              Sign In <ArrowIcon />
+            </button>
+          </form>
+
+          <p className="switch-auth">
             Don't have an account?{" "}
-            <Link to={"/register"} className="login-link">
-              Register
+            <Link to="/register" className="login-link">
+              Sign up
             </Link>
           </p>
         </div>
       </div>
+
+      <footer className="page-footer">
+        <span>© 2026 CareerAI. Powered by Intelligence.</span>
+        <nav>
+          <a href="#privacy">Privacy Policy</a>
+          <a href="#terms">Terms of Service</a>
+          <a href="#help">Help Center</a>
+        </nav>
+      </footer>
     </main>
   );
 };
