@@ -9,8 +9,12 @@ const app= express();
 
 app.use(express.json());
 app.use(cookieParser());
+const clientOrigin = process.env.CLIENT_ORIGIN
+  ? [process.env.CLIENT_ORIGIN, "http://localhost:5173", "http://localhost:5174"]
+  : ["http://localhost:5173", "http://localhost:5174"];
+
 app.use(cors({
-  origin: "http://localhost:5173",
+  origin: clientOrigin,
   credentials: true,
 }));
 

@@ -1,10 +1,32 @@
-const express = require('express');
+const express = require("express");
+
 const router = express.Router();
-const authMiddleware = require('../middlewares/auth.middleware')
-const fileMiddleware = require('../middlewares/file.middleware')
 
-const interviewController= require('../controllers/interview.controller')
+const authMiddleware = require("../middlewares/auth.middleware");
+const fileMiddleware = require("../middlewares/file.middleware");
 
-router.post('/', authMiddleware, fileMiddleware.single('resume'), interviewController.generateReport);
+const interviewController = require("../controllers/interview.controller");
 
-module.exports= router;
+// Generate interview report
+router.post(
+  "/",
+  authMiddleware,
+  fileMiddleware.single("resumeFile"),
+  interviewController.generateReport
+);
+
+// Get single interview report
+router.get(
+  "/interview/:interviewId",
+  authMiddleware,
+  interviewController.getReport
+);
+
+// Get all interview reports
+router.get(
+  "/",
+  authMiddleware,
+  interviewController.getAllReports
+);
+
+module.exports = router;

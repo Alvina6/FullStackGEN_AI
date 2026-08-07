@@ -1,26 +1,46 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import "../styles/home.scss";
+import { useInterview } from "../hooks/useInterview";
 
 const Home = () => {
+  const { loading, generateReport } = useInterview();
+
+  const navigate = useNavigate();
+
   const [jobDescription, setJobDescription] = useState("");
-  const [resumeFile, setResumeFile] = useState(null);
   const [selfDescription, setSelfDescription] = useState("");
-  const [generating, setGenerating] = useState(false);
+  const [resumeFile, setResumeFile] = useState(null);
 
-  const handleFileChange = (e) => {
-    const file = e.target.files?.[0];
-    if (file) setResumeFile(file);
-  };
+  const handleGenerate = async (e) => {
+    e.preventDefault();
 
-  const handleGenerate = async () => {
-    setGenerating(true);
+    if (!jobDescription.trim()) {
+      alert("Please enter the job description.");
+      return;
+    }
+
+    if (!resumeFile) {
+      alert("Please upload your resume.");
+      return;
+    }
+
     try {
-      console.log({ jobDescription, resumeFile, selfDescription });
-    } finally {
-      setGenerating(false);
+      const data = await generateReport({
+        jobDescription,
+        selfDescription,
+        resumeFile,
+      });
+
+      console.log("Generated Report:", data);
+
+      navigate(`/interview/${data._id}`);
+    } catch (error) {
+      console.error("Generate report failed:", error);
+      alert("Failed to generate interview report.");
     }
   };
-
   return (
     <div className="home-page">
       {/* TopAppBar */}
@@ -35,70 +55,73 @@ const Home = () => {
         </div>
       </header>
 
-      {/* Main */}
       <main className="page-main">
         <div className="hero">
           <h1>Prepare for Success</h1>
+
           <p>
             Provide context about your upcoming interview, and our AI will
             generate a personalized preparation plan.
           </p>
         </div>
 
-        <form
-          className="prep-form"
-          onSubmit={(e) => {
-            e.preventDefault();
-            handleGenerate();
-          }}
-        >
+        <form className="prep-form" onSubmit={handleGenerate}>
           <div className="form-grid">
-            {/* Left Column: Job Description */}
+            {/* Job Description */}
             <div className="form-column">
               <div className="field-header">
                 <label htmlFor="job-description">Job Description</label>
+
                 <p>Paste the description of the role you are applying for.</p>
               </div>
+
               <div className="textarea-shell">
                 <textarea
                   id="job-description"
                   value={jobDescription}
                   onChange={(e) => setJobDescription(e.target.value)}
-                  placeholder="e.g., Senior Software Engineer at TechCorp..."
+                  placeholder="e.g., Software Engineer at TechCorp..."
                 />
               </div>
             </div>
 
-            {/* Right Column: Resume Upload + Self Description */}
+            {/* Resume + Self Description */}
             <div className="form-column">
+              {/* Resume */}
               <div className="resume-upload-block">
                 <label htmlFor="resume-upload">Your Resume</label>
+
                 <p>Upload your resume to provide context.</p>
 
                 <label className="upload-dropzone" htmlFor="resume-upload">
                   <span className="material-symbols-outlined upload-icon">
                     upload_file
                   </span>
+
                   <span>
                     {resumeFile ? resumeFile.name : "Upload PDF Resume"}
                   </span>
+
                   <input
                     id="resume-upload"
                     type="file"
                     accept="application/pdf"
-                    onChange={handleFileChange}
+                    onChange={(e) => setResumeFile(e.target.files[0])}
                     hidden
                   />
                 </label>
               </div>
 
+              {/* Self Description */}
               <div className="self-description-block">
                 <div className="field-header">
                   <label htmlFor="self-description">
                     Self Description (Optional)
                   </label>
+
                   <p>Add any specific goals or areas you want to focus on.</p>
                 </div>
+
                 <div className="textarea-shell">
                   <textarea
                     id="self-description"
@@ -115,15 +138,18 @@ const Home = () => {
             <button
               className="generate-button"
               type="submit"
-              disabled={generating}
+              disabled={loading}
             >
               <span
                 className="material-symbols-outlined"
-                style={{ fontVariationSettings: "'FILL' 1" }}
+                style={{
+                  fontVariationSettings: "'FILL' 1",
+                }}
               >
                 auto_awesome
               </span>
-              {generating ? "Generating..." : "Generate Prep Plan"}
+
+              {loading ? "Generating..." : "Generate Prep Plan"}
             </button>
           </div>
         </form>
