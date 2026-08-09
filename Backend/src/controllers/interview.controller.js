@@ -83,6 +83,8 @@ async function generateReport(req, res, next) {
       await interviewReportModel.create({
         user: req.user.id,
 
+        title: report.title,
+
         resume: {
           text: resumeText,
           totalPages,
