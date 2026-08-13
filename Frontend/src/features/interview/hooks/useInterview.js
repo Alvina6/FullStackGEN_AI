@@ -1,16 +1,18 @@
-import { useContext } from "react";
+import { useContext , useEffect} from "react";
+
 
 import {
   generateInterviewReport,
   getReportById as getReportByIdApi,
   getAllReport as getAllReportApi,
+  generateResumePdf
 } from "../services/interview.api";
 
 import { InterviewContext } from "../interview.context";
 
 
-export const useInterview = () => {
-    const context = useContext(InterviewContext);
+export const useInterview = (interviewId) => {
+  const context = useContext(InterviewContext);
 
   if (!context) {
     throw new Error(
@@ -106,7 +108,34 @@ export const useInterview = () => {
       setLoading(false);
     }
   };
+const getResumePdf = async (interviewReportId) => {
+        setLoading(true)
+        let response = null
+        try {
+      // Ensure we pass the raw id string to the API
+      response = await generateResumePdf(interviewReportId)
+      const url = window.URL.createObjectURL(new Blob([response], { type: "application/pdf" }))
+      const link = document.createElement("a")
+      link.href = url
+      const idValue = typeof interviewReportId === 'object' ? JSON.stringify(interviewReportId) : String(interviewReportId)
+      link.setAttribute("download", `resume_${idValue}.pdf`)
+            document.body.appendChild(link)
+            link.click()
+        }
+        catch (error) {
+            console.log(error)
+        } finally {
+            setLoading(false)
+        }
+    }
 
+    useEffect(() => {
+        if (interviewId) {
+            getReportById(interviewId)
+        } else {
+            getReports()
+        }
+    }, [ interviewId ])
 
   return {
     loading,
@@ -115,5 +144,6 @@ export const useInterview = () => {
     generateReport,
     getReportById,
     getReports,
+    getResumePdf,
   };
 };

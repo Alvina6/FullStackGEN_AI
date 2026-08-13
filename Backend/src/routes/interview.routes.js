@@ -29,4 +29,6 @@ router.get(
   interviewController.getAllReports
 );
 
+router.post('/resume/pdf/:interviewReportId',authMiddleware, interviewController.generateResumePdfController )
+
 module.exports = router;

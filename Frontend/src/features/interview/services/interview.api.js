@@ -56,3 +56,15 @@ export async function getAllReport() {
 
   return response.data;
 }
+
+export async function generateResumePdf(interviewReportId) {
+  const response = await api.post(
+    `/api/interview/resume/pdf/${interviewReportId}`,
+    null,
+    {
+      responseType: "blob",
+    }
+  );
+
+  return response.data;
+}
