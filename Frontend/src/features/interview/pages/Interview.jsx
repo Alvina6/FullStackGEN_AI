@@ -3,71 +3,6 @@ import { useParams, useNavigate } from "react-router-dom";
 
 import "../styles/interview.scss";
 import { useInterview } from "../hooks/useInterview";
-import { useAuth } from "../../auth/hooks/useAuth";
-
-const CodeIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <polyline points="8 6 2 12 8 18" />
-    <polyline points="16 6 22 12 16 18" />
-  </svg>
-);
-
-const ChatIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
-  </svg>
-);
-
-const MapPinIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
-    <circle cx="12" cy="10" r="3" />
-  </svg>
-);
-
-const WarningIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <path d="m10.29 3.86-8.18 14.14A2 2 0 0 0 3.93 21h16.14a2 2 0 0 0 1.82-2.99L13.71 3.86a2 2 0 0 0-3.42 0z" />
-    <line x1="12" y1="9" x2="12" y2="13" />
-    <line x1="12" y1="17" x2="12.01" y2="17" />
-  </svg>
-);
-
-const ChevronIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <polyline points="6 9 12 15 18 9" />
-  </svg>
-);
-
-const TargetIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <circle cx="12" cy="12" r="9" />
-    <circle cx="12" cy="12" r="4.5" />
-    <circle cx="12" cy="12" r="0.5" fill="currentColor" />
-  </svg>
-);
-
-const LightbulbIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <path d="M9 18h6" />
-    <path d="M10 22h4" />
-    <path d="M12 2a6 6 0 0 0-4 10.5c.6.5 1 1.3 1 2.1V15h6v-.4c0-.8.4-1.6 1-2.1A6 6 0 0 0 12 2Z" />
-  </svg>
-);
-
-const LogoutIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-    <polyline points="16 17 21 12 16 7" />
-    <line x1="21" y1="12" x2="9" y2="12" />
-  </svg>
-);
-
-const SEVERITY_LABEL = {
-  high: "High",
-  medium: "Medium",
-  low: "Low",
-};
 
 const NAV_ITEMS = [
   { key: "technical", label: "Technical Questions", Icon: CodeIcon },
@@ -135,29 +70,6 @@ const Interview = () => {
   const { user, handlelogout } = useAuth();
 
   const [activeTab, setActiveTab] = useState("technical");
-  const [expanded, setExpanded] = useState(() => new Set());
-
-  const handleLogoutClick = async () => {
-    try {
-      await handlelogout();
-      navigate("/login");
-    } catch (error) {
-      console.error("Logout failed:", error);
-      alert("Failed to log out. Please try again.");
-    }
-  };
-
-  const toggleExpanded = (id) => {
-    setExpanded((prev) => {
-      const next = new Set(prev);
-      if (next.has(id)) {
-        next.delete(id);
-      } else {
-        next.add(id);
-      }
-      return next;
-    });
-  };
 
   useEffect(() => {
     if (!interviewId) return;
@@ -313,32 +225,10 @@ const Interview = () => {
         <div className="top-app-bar__inner">
           <div className="brand">CareerAI</div>
 
-          <div className="top-app-bar__right">
-            <nav>
-              <a href="/">Dashboard</a>
-              <span>Interview Prep</span>
-            </nav>
-
-            {user && (
-              <div className="user-menu">
-                <span className="user-menu__avatar">
-                  {(user.username || user.email || "?").charAt(0).toUpperCase()}
-                </span>
-                <span className="user-menu__name">
-                  {user.username || user.email}
-                </span>
-                <button
-                  type="button"
-                  className="user-menu__logout"
-                  onClick={handleLogoutClick}
-                  title="Log out"
-                >
-                  <LogoutIcon />
-                </button>
-              </div>
-            )}
-          </div>
-        </div>
+        <nav>
+          <a href="/">Dashboard</a>
+          <span>Interview Prep</span>
+        </nav>
       </header>
 
       {/* Main */}

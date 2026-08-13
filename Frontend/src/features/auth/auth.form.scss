@@ -1,17 +1,10 @@
 @import url("https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap");
 
-$paper: #faf8f3;
-$paper-alt: #f1ece1;
-$ink: #171b24;
-$ink-soft: #4b5163;
-$muted: #8b8f9c;
-$line: #e3ddce;
-$brass: #a9762f;
-$brass-light: #c99a52;
-$brass-tint: #f4e9d8;
-$brass-dark: #8a5f24;
-$brass-deep: #3f2d15;
-$navy: #16233f;
+$brand: #2563eb;
+$navy: #07152f;
+$text-dark: #0f172a;
+$text-muted: #64748b;
+$border-color: #dbe3ef;
 
 * {
   box-sizing: border-box;
@@ -54,7 +47,6 @@ html, body {
     gap: 0.6rem;
     text-decoration: none;
 
-    
 
     .brand-name {
       font-family: "Fraunces", serif;
@@ -110,7 +102,7 @@ html, body {
 /* Left Panel */
 .auth-panel-left {
   position: relative;
-  background: $brass-deep;
+  background: #fff;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -123,27 +115,8 @@ html, body {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    opacity: 0.42;
-    filter: grayscale(0.35) contrast(1.05);
-  }
-
-  &::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(180deg, rgba(63, 45, 21, 0.15), rgba(63, 45, 21, 0.9));
-    z-index: 1;
-  }
-
-  &::after {
-    content: "CAREERAI · DOSSIER";
-    position: absolute;
-    top: 2rem;
-    left: 2rem;
-    z-index: 2;
-    color: $brass-light;
-    font: 600 0.68rem "IBM Plex Mono", monospace;
-    letter-spacing: 0.14em;
+    opacity: 1;
+    filter: none;
   }
 
   .panel-content {
@@ -297,18 +270,17 @@ html, body {
   border-radius: 3px;
   cursor: pointer;
   color: #fff;
-  background: linear-gradient(135deg, $brass, $brass-dark);
-  font: 600 0.83rem "Inter", sans-serif;
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  font: 700 0.83rem "DM Sans", sans-serif;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.22);
   transition: all 0.2s ease;
 
   &:hover {
-    background: linear-gradient(135deg, #b8823a, #744c1c);
     transform: translateY(-1px);
   }
 
   svg {
-    width: 14px;
-    color: #fff;
+    width: 15px;
   }
 }
 
@@ -368,9 +340,8 @@ html, body {
   height: 100vh;
   display: grid;
   place-items: center;
-  background: $brass-deep;
-  color: $paper;
-  font-family: "Fraunces", serif;
+  background: $navy;
+  color: #fff;
 }
 
 @media (max-width: 768px) {

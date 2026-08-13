@@ -73,86 +73,19 @@ body {
   align-items: center;
   gap: 0.6rem;
   color: $ink;
-  font: 600 1.05rem "Fraunces", serif;
-  letter-spacing: -0.01em;
+  font: 800 1.2rem "Manrope", sans-serif;
 }
 
-
-
-.top-app-bar nav {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
+.brand::before {
+  content: "✦";
+  display: grid;
+  place-items: center;
+  width: 1.7rem;
+  height: 1.7rem;
+  border-radius: 10px;
+  color: #fff;
   font-size: 0.85rem;
-}
-
-.top-app-bar nav a {
-  color: $muted;
-  text-decoration: none;
-}
-
-.top-app-bar nav span {
-  color: $brass;
-  font-weight: 600;
-}
-
-.top-app-bar__right {
-  display: flex;
-  align-items: center;
-  gap: 1.25rem;
-}
-
-.user-menu {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  padding-left: 1.1rem;
-  border-left: 1px solid $line;
-}
-
-.user-menu__avatar {
-  display: grid;
-  place-items: center;
-  width: 1.9rem;
-  height: 1.9rem;
-  border-radius: 999px;
-  background: $brass-tint;
-  color: $brass;
-  font: 700 0.78rem "Inter", sans-serif;
-  flex-shrink: 0;
-}
-
-.user-menu__name {
-  color: $ink-soft;
-  font-size: 0.83rem;
-  font-weight: 600;
-  max-width: 8rem;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.user-menu__logout {
-  display: grid;
-  place-items: center;
-  width: 1.9rem;
-  height: 1.9rem;
-  border: 0;
-  border-radius: 8px;
-  background: transparent;
-  color: $muted;
-  cursor: pointer;
-  transition: background 0.2s ease, color 0.2s ease;
-
-  svg {
-    width: 15px;
-    height: 15px;
-  }
-}
-
-.user-menu__logout:hover {
-  background: #fbe8e4;
-  color: #b3401f;
+  background: linear-gradient(135deg, #60a5fa, #4338ca);
 }
 
 .page-main {
@@ -659,34 +592,22 @@ body {
   color: $brass;
 }
 
+/* Mobile Responsiveness */
+@media (max-width: 860px) {
+  .top-app-bar__inner,
+  .page-main,
+  .page-footer__inner {
+    width: calc(100% - 1.25rem);
+  }
 
-.generate-button {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.55rem;
-  padding: 0.85rem 1.75rem;
-  border: 0;
-  border-radius: 10px;
-  background: #836a44;
-  color: $paper;
-  font: 600 0.88rem "Inter", sans-serif;
-  cursor: pointer;
-  box-shadow: 0 10px 26px rgba(22, 35, 63, 0.22);
-  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
-}
+  .nav-links {
+    gap: 1rem;
+  }
 
-.generate-button:hover:not(:disabled) {
-  background: #836a40;
-  transform: translateY(-1px);
-}
+  .page-main {
+    padding: 1.5rem 0;
+  }
 
-.generate-button:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-
-@media (max-width: 900px) {
   .interview-panel {
     grid-template-columns: 1fr;
     max-width: 560px;

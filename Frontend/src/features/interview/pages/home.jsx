@@ -3,117 +3,15 @@ import { useNavigate } from "react-router-dom";
 
 import "../styles/home.scss";
 import { useInterview } from "../hooks/useInterview";
-import { useAuth } from "../../auth/hooks/useAuth";
-
-const BriefcaseIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <rect x="2" y="7" width="20" height="14" rx="2" />
-    <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
-  </svg>
-);
-
-const PersonIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <circle cx="12" cy="8" r="4" />
-    <path d="M4 21v-1a8 8 0 0 1 16 0v1" />
-  </svg>
-);
-
-const UploadCloudIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <path d="M16 16l-4-4-4 4" />
-    <path d="M12 12v9" />
-    <path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3" />
-  </svg>
-);
-
-const InfoIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <circle cx="12" cy="12" r="10" />
-    <line x1="12" y1="16" x2="12" y2="12" />
-    <line x1="12" y1="8" x2="12.01" y2="8" />
-  </svg>
-);
-
-const HistoryIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <path d="M3 12a9 9 0 1 0 3-6.7" />
-    <path d="M3 5v4h4" />
-    <path d="M12 7v5l3 3" />
-  </svg>
-);
-
-const ChevronRightIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <polyline points="9 6 15 12 9 18" />
-  </svg>
-);
-
-const LogoutIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-    <polyline points="16 17 21 12 16 7" />
-    <line x1="21" y1="12" x2="9" y2="12" />
-  </svg>
-);
-
-const MAX_CHARS = 5000;
-
-const formatDate = (value) => {
-  if (!value) return "";
-  try {
-    return new Date(value).toLocaleDateString(undefined, {
-      day: "numeric",
-      month: "short",
-      year: "numeric",
-    });
-  } catch {
-    return "";
-  }
-};
 
 const Home = () => {
-  const { loading, reports, generateReport, getReports } = useInterview();
-  const { user, handlelogout } = useAuth();
+  const { loading, generateReport } = useInterview();
 
   const navigate = useNavigate();
 
   const [jobDescription, setJobDescription] = useState("");
   const [selfDescription, setSelfDescription] = useState("");
   const [resumeFile, setResumeFile] = useState(null);
-  const [reportsLoading, setReportsLoading] = useState(false);
-
-  useEffect(() => {
-    let cancelled = false;
-
-    const loadReports = async () => {
-      setReportsLoading(true);
-      try {
-        await getReports();
-      } catch (error) {
-        console.error("Failed to load previous reports:", error);
-      } finally {
-        if (!cancelled) setReportsLoading(false);
-      }
-    };
-
-    loadReports();
-
-    return () => {
-      cancelled = true;
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const handleLogoutClick = async () => {
-    try {
-      await handlelogout();
-      navigate("/login");
-    } catch (error) {
-      console.error("Logout failed:", error);
-      alert("Failed to log out. Please try again.");
-    }
-  };
 
   const handleGenerate = async (e) => {
     e.preventDefault();
