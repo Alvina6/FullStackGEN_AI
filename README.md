@@ -28,11 +28,13 @@
 ## ✨ Features
 
 ### 🎯 Intelligent Interview Analysis
+
 - **AI-Powered Resume Analysis**: Parses your resume and extracts key competencies
 - **Job Description Matching**: Analyzes target job requirements against your profile
 - **Match Score**: Get an immediate compatibility score (0-100%) for the position
 
 ### 🎓 Personalized Interview Prep
+
 - **Technical Questions**: AI-generated technical questions tailored to the job role
   - Includes question intent and sample answers
 - **Behavioral Questions**: Customized behavioral questions with strategic guidance
@@ -40,16 +42,19 @@
   - Prioritized by severity (High/Medium/Low)
 
 ### 📅 Preparation Roadmap
+
 - **Day-by-Day Plan**: Structured 30-day interview preparation timeline
 - **Actionable Tasks**: Specific daily tasks and focus areas
 - **Progress Tracking**: Monitor your preparation journey
 
 ### 📄 Resume Optimization
+
 - **AI-Generated Resume PDF**: Get an optimized resume tailored to the job
 - **ATS Optimization**: Automatically formatted for Applicant Tracking Systems
 - **Keyword Integration**: Strategic incorporation of job description keywords
 
 ### 👤 User Management
+
 - **Secure Authentication**: JWT-based authentication with password hashing (bcrypt)
 - **Session Management**: Persistent login with secure cookies
 - **User Profiles**: Track interview preparation history
@@ -59,13 +64,14 @@
 ## 🛠 Tech Stack
 
 ### Backend
+
 - **Runtime**: Node.js
 - **Framework**: Express.js 5.2.1
 - **Database**: MongoDB with Mongoose 9.8.0
 - **AI Engine**: Google GenAI API
 - **Authentication**: JWT (jsonwebtoken 9.0.3)
 - **Security**: bcrypt 6.0.0
-- **File Processing**: 
+- **File Processing**:
   - pdf-parse 2.4.5 (PDF extraction)
   - multer 2.2.0 (File uploads)
   - puppeteer 25.6.0 (PDF generation)
@@ -74,6 +80,7 @@
 - **Environment**: dotenv 17.4.2
 
 ### Frontend
+
 - **UI Library**: React 19.2.7
 - **Build Tool**: Vite 8.1.1
 - **Routing**: React Router v8.3.0
@@ -82,6 +89,7 @@
 - **Linting**: ESLint 10.6.0
 
 ### Development Tools
+
 - **Version Control**: Git
 - **Package Manager**: npm
 
@@ -157,12 +165,14 @@ full_stack_genAI/
 ## 🚀 Getting Started
 
 ### Prerequisites
+
 - **Node.js** v18 or higher
 - **npm** v8 or higher
 - **MongoDB** (local or cloud instance)
 - **Google GenAI API Key** (free tier available)
 
 ### Clone the Repository
+
 ```bash
 git clone <repository-url>
 cd full_stack_genAI
@@ -173,12 +183,14 @@ cd full_stack_genAI
 ## 📦 Installation
 
 ### Backend Setup
+
 ```bash
 cd Backend
 npm install
 ```
 
 ### Frontend Setup
+
 ```bash
 cd ../Frontend
 npm install
@@ -189,6 +201,7 @@ npm install
 ## ⚙️ Configuration
 
 ### Backend Environment Variables
+
 Create a `.env` file in the `Backend` directory:
 
 ```env
@@ -209,13 +222,14 @@ FRONTEND_URL=http://localhost:5173
 ```
 
 ### Frontend Configuration
+
 The frontend automatically connects to `http://localhost:5000` for API calls. Update this in `src/features/auth/services/auth.api.js` if needed:
 
 ```javascript
 const api = axios.create({
-  baseURL: 'http://localhost:5000',
+  baseURL: "http://localhost:5000",
   withCredentials: true,
-})
+});
 ```
 
 ---
@@ -223,6 +237,7 @@ const api = axios.create({
 ## 🏃 Running the Application
 
 ### Terminal 1: Start Backend Server
+
 ```bash
 cd Backend
 npm start
@@ -230,6 +245,7 @@ npm start
 ```
 
 ### Terminal 2: Start Frontend Development Server
+
 ```bash
 cd Frontend
 npm run dev
@@ -237,6 +253,7 @@ npm run dev
 ```
 
 ### Build for Production
+
 ```bash
 # Backend (already production-ready)
 cd Backend
@@ -253,9 +270,11 @@ npm run preview  # Preview production build
 ## 📚 API Documentation
 
 ### Authentication Routes
+
 **Base URL**: `http://localhost:5000/api/auth`
 
 #### Register
+
 ```http
 POST /register
 Content-Type: application/json
@@ -268,6 +287,7 @@ Content-Type: application/json
 ```
 
 #### Login
+
 ```http
 POST /login
 Content-Type: application/json
@@ -279,21 +299,25 @@ Content-Type: application/json
 ```
 
 #### Get Current User
+
 ```http
 GET /get-me
 Authorization: Bearer <jwt_token>
 ```
 
 #### Logout
+
 ```http
 GET /logout
 Authorization: Bearer <jwt_token>
 ```
 
 ### Interview Routes
+
 **Base URL**: `http://localhost:5000/api/interview`
 
 #### Generate Interview Report
+
 ```http
 POST /generate
 Content-Type: multipart/form-data
@@ -306,6 +330,7 @@ Form Data:
 ```
 
 **Response**:
+
 ```json
 {
   "_id": "60d5ec49c1234567890abcde",
@@ -363,18 +388,18 @@ Response (JSON)
 ### Authentication Flow
 
 ```
-Login → JWT Generated → Stored in Cookies → 
+Login → JWT Generated → Stored in Cookies →
 Verified on Protected Routes → Access Granted
 ```
 
 ### Interview Generation Flow
 
 ```
-Resume (PDF) → Parse Text → 
-Job Description + Resume Text → 
-Google GenAI Analysis → 
-Generate Questions + Gaps + Plan → 
-Save to MongoDB → 
+Resume (PDF) → Parse Text →
+Job Description + Resume Text →
+Google GenAI Analysis →
+Generate Questions + Gaps + Plan →
+Save to MongoDB →
 Display to User
 ```
 
