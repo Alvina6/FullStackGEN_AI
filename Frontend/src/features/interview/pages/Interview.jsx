@@ -3,6 +3,80 @@ import { useParams, useNavigate } from "react-router-dom";
 
 import "../styles/interview.scss";
 import { useInterview } from "../hooks/useInterview";
+import { useAuth } from "../../auth/hooks/useAuth";
+
+// Icon Components
+const CodeIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <polyline points="16 18 22 12 16 6" />
+    <polyline points="8 6 2 12 8 18" />
+  </svg>
+);
+
+const ChatIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+  </svg>
+);
+
+const MapPinIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+    <circle cx="12" cy="10" r="3" />
+  </svg>
+);
+
+const ChevronIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <polyline points="6 9 12 15 18 9" />
+  </svg>
+);
+
+const TargetIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <circle cx="12" cy="12" r="1" />
+    <circle cx="12" cy="12" r="5" />
+    <circle cx="12" cy="12" r="9" />
+  </svg>
+);
+
+const LightbulbIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+  </svg>
+);
+
+const WarningIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3.05h16.94a2 2 0 0 0 1.71-3.05L13.71 3.86a2 2 0 0 0-3.42 0z" />
+    <line x1="12" y1="9" x2="12" y2="13" />
+    <line x1="12" y1="17" x2="12.01" y2="17" />
+  </svg>
+);
+
+const LogoutIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+    <polyline points="16 17 21 12 16 7" />
+    <line x1="21" y1="12" x2="9" y2="12" />
+  </svg>
+);
+
+const FileWarningIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+    <polyline points="14 2 14 8 20 8" />
+    <line x1="12" y1="13" x2="12" y2="16" />
+    <line x1="12" y1="18.5" x2="12.01" y2="18.5" />
+  </svg>
+);
+
+// Constants
+const SEVERITY_LABEL = {
+  high: "High",
+  medium: "Medium",
+  low: "Low",
+};
 
 const NAV_ITEMS = [
   { key: "technical", label: "Technical Questions", Icon: CodeIcon },
@@ -61,6 +135,46 @@ const matchLabel = (value) => {
   return "Needs focused preparation";
 };
 
+// Shared shell used by the loading / not-found states so they don't
+// render as bare unstyled text before the report is available.
+const InterviewShell = ({ user, onLogout, children }) => (
+  <div className="interview-page">
+    <header className="top-app-bar">
+      <div className="top-app-bar__inner">
+        <div className="brand">CareerAI</div>
+
+        <div className="top-app-bar__right">
+          <nav>
+            <a href="/">Dashboard</a>
+            <span>Interview Prep</span>
+          </nav>
+
+          {user && (
+            <div className="user-menu">
+              <span className="user-menu__avatar">
+                {(user.username || user.email || "?").charAt(0).toUpperCase()}
+              </span>
+              <span className="user-menu__name">
+                {user.username || user.email}
+              </span>
+              <button
+                type="button"
+                className="user-menu__logout"
+                onClick={onLogout}
+                title="Log out"
+              >
+                <LogoutIcon />
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
+    </header>
+
+    <main className="state-screen">{children}</main>
+  </div>
+);
+
 const Interview = () => {
   const { interviewId } = useParams();
   const navigate = useNavigate();
@@ -70,6 +184,27 @@ const Interview = () => {
   const { user, handlelogout } = useAuth();
 
   const [activeTab, setActiveTab] = useState("technical");
+  const [expanded, setExpanded] = useState(new Set());
+
+  const toggleExpanded = (id) => {
+    const newExpanded = new Set(expanded);
+    if (newExpanded.has(id)) {
+      newExpanded.delete(id);
+    } else {
+      newExpanded.add(id);
+    }
+    setExpanded(newExpanded);
+  };
+
+  const handleLogoutClick = async () => {
+    try {
+      await handlelogout();
+      navigate("/login", { replace: true });
+    } catch (error) {
+      console.error("Logout failed:", error);
+      alert("Failed to logout");
+    }
+  };
 
   useEffect(() => {
     if (!interviewId) return;
@@ -79,17 +214,27 @@ const Interview = () => {
 
   if (loading) {
     return (
-      <div className="page-main">
-        <div className="empty-state">Loading interview report...</div>
-      </div>
+      <InterviewShell user={user} onLogout={handleLogoutClick}>
+        <div className="state-card">
+          <span className="state-card__spinner" />
+          <span className="state-card__title">Preparing your Resume</span>
+          <p>This usually takes a few seconds...</p>
+        </div>
+      </InterviewShell>
     );
   }
 
   if (!report) {
     return (
-      <div className="page-main">
-        <div className="empty-state">Interview report not found.</div>
-      </div>
+      <InterviewShell user={user} onLogout={handleLogoutClick}>
+        <div className="state-card">
+          <span className="state-card__icon">
+            <FileWarningIcon />
+          </span>
+          <span className="state-card__title">Report not found</span>
+          <p>We couldn't find this interview report.</p>
+        </div>
+      </InterviewShell>
     );
   }
 
@@ -225,10 +370,32 @@ const Interview = () => {
         <div className="top-app-bar__inner">
           <div className="brand">CareerAI</div>
 
-        <nav>
-          <a href="/">Dashboard</a>
-          <span>Interview Prep</span>
-        </nav>
+          <div className="top-app-bar__right">
+            <nav>
+              <a href="/">Dashboard</a>
+              <span>Interview Prep</span>
+            </nav>
+
+            {user && (
+              <div className="user-menu">
+                <span className="user-menu__avatar">
+                  {(user.username || user.email || "?").charAt(0).toUpperCase()}
+                </span>
+                <span className="user-menu__name">
+                  {user.username || user.email}
+                </span>
+                <button
+                  type="button"
+                  className="user-menu__logout"
+                  onClick={handleLogoutClick}
+                  title="Log out"
+                >
+                  <LogoutIcon />
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
       </header>
 
       {/* Main */}

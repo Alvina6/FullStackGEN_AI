@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "../auth.form.scss";
+import "../../interview/styles/interview.scss";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 
@@ -44,9 +45,11 @@ const Login = () => {
 
   if (loading) {
     return (
-      <main className="loading-state">
-        <h1>loading ...............</h1>
-      </main>
+      <div className="state-card">
+        <span className="state-card__spinner" />
+        <span className="state-card__title">Loading...</span>
+        <p>This usually takes a few seconds...</p>
+      </div>
     );
   }
 
@@ -71,7 +74,7 @@ const Login = () => {
           <img
             className="panel-bg-image"
             alt="Career Background"
-            src="https://img.magnific.com/free-photo/businesswoman-interacting-with-ai-hologram-office_23-2151977876.jpg?semt=ais_test_b&w=740&q=80"
+            src="https://media.licdn.com/dms/image/v2/D5612AQEGIckqnN4Wsw/article-cover_image-shrink_720_1280/B56ZWA2gPOHQAM-/0/1741623528189?e=2147483647&v=beta&t=WgRVXE0BPOiGDqzH9XtpxUDu0sVnlKigVTQxtrnx-qY"
           />
           <div className="panel-content">
             <h2>Welcome Back!</h2>
