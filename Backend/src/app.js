@@ -18,13 +18,14 @@ app.use(cors({
 app.use('/api/auth', authRoutes);
 app.use('/api/interview', interviewRoutes);
 
-app.use((req, res) => {
-  res.status(404).json({ message: 'Route not found' });
-});
-
 app.use("/",(req,res)=>{
   res.send("server is running")
 })
+
+
+app.use((req, res) => {
+  res.status(404).json({ message: 'Route not found' });
+});
 
 
 module.exports= app;
